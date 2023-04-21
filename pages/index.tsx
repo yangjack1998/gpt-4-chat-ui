@@ -8,6 +8,7 @@ import Link from "next/link";
 
 export default function Home() {
   const [userInput, setUserInput] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([
     { role: "assistant", content: "Hi there! How can I help?" },
@@ -44,6 +45,7 @@ useEffect(() => {
     ]);
     setLoading(false);
     setUserInput("");
+    setPassword("");
   };
 
   // Handle form submission
@@ -53,7 +55,9 @@ useEffect(() => {
     if (userInput.trim() === "") {
       return;
     }
-
+    if (password!="dudu") {
+      return;
+    }
     setLoading(true);
     const context = [...messages, { role: "user", content: userInput }];
     setMessages(context);
@@ -64,7 +68,7 @@ useEffect(() => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ messages: context }),
+      body: JSON.stringify({ messages: context, password: password }),
     });
 
     // Reset user input
@@ -185,6 +189,14 @@ useEffect(() => {
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 className={styles.textarea}
+              />
+              <input 
+                type="password"
+                id="passwordInput"
+                name="passwordInput"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="submit"
